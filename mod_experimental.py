@@ -3,11 +3,11 @@ import matplotlib.pyplot as plt
 from matplotlib import animation
 
 # returns coordinates on circle edge
-def pos(N,array):
-    return np.array([np.cos(array*(2*np.pi)/N), np.sin(array*(2*np.pi)/N)]).T
+def pos(N,array,i,j, k, l):
+    return np.array([i*np.cos(array*(2*np.pi)/N/5+j/40),k*np.sin(array*(2*np.pi)/N/5 + l/35)]).T
 
 # lines, points
-L, N = 500, 500
+L, N = 1000, 1000
 a = np.arange(L)
 
 # figure, axis
@@ -22,7 +22,7 @@ ax.axis('off')
 fig.patch.set_facecolor('black')
 
 # lines
-lines = sum([ax.plot([],[], 'go-', alpha=0.5, linewidth=0.2, markersize=0.1) for _ in range(L)], [])
+lines = sum([ax.plot([],[], 'go-', alpha=0.5, linewidth=0.1, markersize=0.1) for _ in range(L)], [])
 
 def init():
     for line in lines:
@@ -30,8 +30,8 @@ def init():
     return lines
 
 def animate(i):
-    b = a*(i+4010)/10
-    a_pos, b_pos = pos(N,a), pos(N,b)
+    b = a*(i)/100
+    a_pos, b_pos = pos(N,a,np.tanh(i),2*i,np.tanh(1000-i), 234-i), pos(N,b,np.tanh(i), i*2, np.tanh(i-i**2), i)
     for j, line in enumerate(lines):
         x1, y1 = a_pos[j]
         x2, y2 = b_pos[j]
@@ -42,7 +42,7 @@ def animate(i):
 
 
 anim = animation.FuncAnimation(fig, animate, init_func=init, 
-                               frames=100, interval=20, blit=True)
+                               frames=1000, interval=20, blit=True)
 
-#anim.save('mod_circle.mp4', fps=100, savefig_kwargs={'facecolor':'black'})
+anim.save('mod_circle.mp4', fps=100, savefig_kwargs={'facecolor':'black'})
 plt.show()
